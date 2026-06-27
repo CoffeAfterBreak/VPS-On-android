@@ -53,11 +53,44 @@ sleep 3
 
 echo "setup admin user"
 adduser admin
+exit
+curl -fsSL
+curl -fsSL
 EOF
 sleep 3
 
+curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/start.sh" -o ~/start.sh
+chmod +x ~/start.sh
+clear
 echo "setup SSH"
 passwd
 whoami
 echo "this name will be used when you try SSH it"
 sshd
+sleep 6
+
+echo "================================================================"
+echo "                SETUP COMPLETED SUCCESSFULLY!                   "
+echo "================================================================"
+echo ""
+echo "CRITICAL: Pay close attention to WHERE you run each script!"
+echo ""
+echo "1. TO START THE SERVERS (Run this in OUTER TERMUX ONLY):"
+echo "   Command: ./start.sh"
+echo "   -> Location: Outer Termux environment (before logging into Debian)."
+echo "   -> Effect: Launches SSH, triggers Nginx, Filebrowser, and Gitea"
+echo "              in the background, then drops you into Debian."
+echo ""
+echo "2. TO RESTART SERVICES (Run this INSIDE DEBIAN PROOT ONLY):"
+echo "   Command: ./restart.sh"
+echo "   -> Location: Inside your Debian PRoot terminal session."
+echo "   -> Effect: Reloads Nginx configs and cleanly restarts"
+echo "              Filebrowser and Gitea after you upload new files."
+echo ""
+echo "3. TO KILL ALL SERVICES (Run this INSIDE DEBIAN PROOT ONLY):"
+echo "   Command: ./stop.sh"
+echo "   -> Location: Inside your Debian PRoot terminal session."
+echo "   -> Effect: Safely forces Nginx to stop and kills all background"
+echo "              processes (Gitea, Filebrowser, Node, Python3)."
+echo ""
+echo "================================================================"
