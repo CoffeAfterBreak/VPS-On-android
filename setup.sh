@@ -31,7 +31,7 @@ curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bas
 echo "setup filebrowser"
 mkdir -p /home/admin
 filebrowser config init -d /home/admin/filebrowser.db
-filebrowser config set -d / --address 0.0.0.0 --port 4000 --root /home/admin
+filebrowser config set -d /home/admin/filebrowser.db --address 0.0.0.0 --port 4000 --root /
 filebrowser users add admin "admin12345678" --perm.admin=true -d /home/admin/filebrowser.db 2>/dev/null || filebrowser users update admin --password "admin12345678" -d /home/admin/filebrowser.db
 echo "download caddy"
 wget -O /usr/local/bin/caddy "https://caddyserver.com/api/download?os=linux&arch=arm64"
@@ -44,39 +44,10 @@ cat << '_CADDY_' > /home/admin/Caddyfile
     file_server browse
 }
 _CADDY_
-echo "create start script"
+echo "download control scripts"
 curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/start.sh" -o /home/admin/start.sh
-echo "start caddy"
-nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
-echo "start filebrowser"
-nohup filebrowser -d /home/admin/filebrowser.db > /dev/null 2>&1 &
-echo "start gitea"
-nohup env GITEA__server__HTTP_PORT=5000 /usr/local/bin/gitea web > /dev/null 2>&1 &
-_START_
-echo "create restart script"
 curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/restart.sh" -o /home/admin/restart.sh
-echo "stop server"
-pkill -f caddy
-pkill -f filebrowser
-pkill -f gitea
-echo "start caddy"
-nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
-echo "start filebrowser"
-nohup filebrowser -d /home/admin/filebrowser.db > /dev/null 2>&1 &
-echo "start gitea"
-nohup env GITEA__server__HTTP_PORT=5000 /usr/local/bin/gitea web > /dev/null 2>&1 &
-_RESTART_
-echo "create stop script"
 curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/stop.sh" -o /home/admin/stop.sh
-echo "stop caddy"
-pkill -f caddy
-echo "stop filebrowser"
-pkill -f filebrowser
-echo "stop gitea"
-pkill -f gitea
-echo "exit"
-kill -9 $PPID
-_STOP_
 echo "apply permission"
 chmod +x /home/admin/start.sh /home/admin/restart.sh /home/admin/stop.sh
 chown -R admin:admin /var/www/Project
