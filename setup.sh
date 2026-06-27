@@ -45,7 +45,7 @@ cat << '_CADDY_' > /home/admin/Caddyfile
 }
 _CADDY_
 echo "create start script"
-cat << '_START_' > /home/admin/start.sh
+curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/start.sh" -o /home/admin/start.sh
 echo "start caddy"
 nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
 echo "start filebrowser"
@@ -54,7 +54,7 @@ echo "start gitea"
 nohup env GITEA__server__HTTP_PORT=5050 /usr/local/bin/gitea web > /dev/null 2>&1 &
 _START_
 echo "create restart script"
-cat << '_RESTART_' > /home/admin/restart.sh
+curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/restart.sh" -o /home/admin/restart.sh
 echo "stop server"
 pkill -f caddy
 pkill -f filebrowser
@@ -67,7 +67,7 @@ echo "start gitea"
 nohup env GITEA__server__HTTP_PORT=5050 /usr/local/bin/gitea web > /dev/null 2>&1 &
 _RESTART_
 echo "create stop script"
-cat << '_STOP_' > /home/admin/stop.sh
+curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/stop.sh" -o /home/admin/stop.sh
 echo "stop caddy"
 pkill -f caddy
 echo "stop filebrowser"
