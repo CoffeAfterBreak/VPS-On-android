@@ -31,7 +31,7 @@ curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bas
 echo "setup filebrowser"
 mkdir -p /home/admin
 filebrowser config init -d /home/admin/filebrowser.db
-filebrowser config set -d /home/admin/filebrowser.db --address 0.0.0.0 --port 5000 --root /home/admin
+filebrowser config set -d /home/admin/filebrowser.db --address 0.0.0.0 --port 4000 --root /home/admin
 filebrowser users add admin "admin12345678" --perm.admin=true -d /home/admin/filebrowser.db 2>/dev/null || filebrowser users update admin --password "admin12345678" -d /home/admin/filebrowser.db
 echo "download caddy"
 wget -O /usr/local/bin/caddy "https://caddyserver.com/api/download?os=linux&arch=arm64"
@@ -39,7 +39,7 @@ chmod +x /usr/local/bin/caddy
 echo "setup directory"
 mkdir -p /var/www/Project/Dev{1..10}
 cat << '_CADDY_' > /home/admin/Caddyfile
-:6000 {
+:3000 {
     root * /var/www/Project
     file_server browse
 }
@@ -51,7 +51,7 @@ nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
 echo "start filebrowser"
 nohup filebrowser -d /home/admin/filebrowser.db > /dev/null 2>&1 &
 echo "start gitea"
-nohup env GITEA__server__HTTP_PORT=5050 /usr/local/bin/gitea web > /dev/null 2>&1 &
+nohup env GITEA__server__HTTP_PORT=5000 /usr/local/bin/gitea web > /dev/null 2>&1 &
 _START_
 echo "create restart script"
 curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/restart.sh" -o /home/admin/restart.sh
@@ -64,7 +64,7 @@ nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
 echo "start filebrowser"
 nohup filebrowser -d /home/admin/filebrowser.db > /dev/null 2>&1 &
 echo "start gitea"
-nohup env GITEA__server__HTTP_PORT=5050 /usr/local/bin/gitea web > /dev/null 2>&1 &
+nohup env GITEA__server__HTTP_PORT=5000 /usr/local/bin/gitea web > /dev/null 2>&1 &
 _RESTART_
 echo "create stop script"
 curl -fsSL "https://raw.githubusercontent.com/CoffeAfterBreak/VPS-On-android/main/stop.sh" -o /home/admin/stop.sh
