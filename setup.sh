@@ -31,7 +31,7 @@ curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bas
 echo "setup filebrowser"
 mkdir -p /home/admin
 filebrowser config init -d /home/admin/filebrowser.db
-filebrowser config set -d /home/admin/filebrowser.db --address 0.0.0.0 --port 4000 --root /home/admin
+filebrowser config set -d /home/ --address 0.0.0.0 --port 4000 --root /home/admin
 filebrowser users add admin "admin12345678" --perm.admin=true -d /home/admin/filebrowser.db 2>/dev/null || filebrowser users update admin --password "admin12345678" -d /home/admin/filebrowser.db
 echo "download caddy"
 wget -O /usr/local/bin/caddy "https://caddyserver.com/api/download?os=linux&arch=arm64"
