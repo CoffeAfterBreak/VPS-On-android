@@ -1,3 +1,5 @@
+echo "stop php-fpm"
+service php-fpm stop > /dev/null 2>&1
 echo "stop caddy"
 pkill -f caddy
 echo "stop filebrowser"

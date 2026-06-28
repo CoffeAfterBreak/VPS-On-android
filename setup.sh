@@ -54,6 +54,7 @@ mkdir -p /var/www/Project/Dev{1..10}
 cat << '_CADDY_' > /home/admin/Caddyfile
 :3000 {
     root * /var/www/Project
+    php_fastcgi localhost:9000
     file_server browse
 }
 _CADDY_
