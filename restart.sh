@@ -1,13 +1,13 @@
 echo "stop server"
-service php-fpm stop > /dev/null 2>&1
+service php8.4-fpm stop > /dev/null 2>&1
 pkill -f caddy
 pkill -f filebrowser
 pkill -f gitea
 pkill -f redis-server
 pkill -f redis-commander
 service ssh stop > /dev/null 2>&1
-echo "start php-fpm"
-service php-fpm start > /dev/null 2>&1
+echo "start php8.4-fpm"
+service php8.4-fpm start > /dev/null 2>&1
 echo "start caddy"
 nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
 echo "start filebrowser"

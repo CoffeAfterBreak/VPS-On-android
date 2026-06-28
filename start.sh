@@ -1,5 +1,5 @@
-echo "start php-fpm"
-service php-fpm start > /dev/null 2>&1
+echo "start php8.4-fpm"
+service php8.4-fpm start > /dev/null 2>&1
 echo "start caddy"
 nohup caddy run --config /home/admin/Caddyfile > /dev/null 2>&1 &
 echo "start filebrowser"
