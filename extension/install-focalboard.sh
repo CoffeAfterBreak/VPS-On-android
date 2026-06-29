@@ -1,6 +1,5 @@
 #!/bin/bash
 
-proot-distro login debian << 'DEBIAN_EOF'
 export DEBIAN_FRONTEND=noninteractive
 
 FOCALBOARD_DIR="/opt/focalboard"
@@ -35,7 +34,6 @@ cat > $FOCALBOARD_DIR/config.json << 'CONFIG_EOF'
 CONFIG_EOF
 
 chown admin:admin $FOCALBOARD_DIR/config.json
-DEBIAN_EOF
 
 # Add reverse proxy to Caddyfile if not exists
 if ! grep -q "reverse_proxy /focalboard" /home/admin/Caddyfile; then

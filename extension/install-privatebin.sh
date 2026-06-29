@@ -1,6 +1,5 @@
 #!/bin/bash
 
-proot-distro login debian << 'DEBIAN_EOF'
 export DEBIAN_FRONTEND=noninteractive
 apt-get update > /dev/null 2>&1
 
@@ -13,7 +12,6 @@ rm privatebin.zip
 
 chmod -R 755 $PRIVATEBIN_DIR
 chown -R admin:admin $PRIVATEBIN_DIR
-DEBIAN_EOF
 
 # Add reverse proxy to Caddyfile if not exists
 if ! grep -q "reverse_proxy /paste" /home/admin/Caddyfile; then
