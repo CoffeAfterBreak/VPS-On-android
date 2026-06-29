@@ -15,23 +15,27 @@ chmod -R 755 $PRIVATEBIN_DIR
 chown -R admin:admin $PRIVATEBIN_DIR
 DEBIAN_EOF
 
-grep -q "reverse_proxy /paste" /home/admin/Caddyfile || \
-sed -i '/file_server browse/i\    reverse_proxy /paste 0.0.0.0:5500' /home/admin/Caddyfile
+# Add reverse proxy to Caddyfile if not exists
+if ! grep -q "reverse_proxy /paste" /home/admin/Caddyfile; then
+    sed -i '/file_server browse/i\    reverse_proxy /paste 0.0.0.0:5500' /home/admin/Caddyfile
+fi
 
-grep -q "PrivateBin" /home/admin/start.sh || \
-sed -i '/# EXTENSION SERVICES/i\
-nohup php -S 0.0.0.0:5500 -t /var/www/privatebin > /dev/null 2>&1 &' /home/admin/start.sh
+# Add PrivateBin to start.sh
+if ! grep -q "php -S 0.0.0.0:5500" /home/admin/start.sh; then
+    sed -i '/# EXTENSION SERVICES/i nohup php -S 0.0.0.0:5500 -t /var/www/privatebin > /dev/null 2>&1 &' /home/admin/start.sh
+fi
 
-grep -q "privatebin" /home/admin/stop.sh || \
-sed -i '/# EXTENSION SERVICES/i\
-pkill -f "php -S 0.0.0.0:5500"' /home/admin/stop.sh
+# Add PrivateBin to stop.sh
+if ! grep -q "php -S 0.0.0.0:5500" /home/admin/stop.sh; then
+    sed -i '/# EXTENSION SERVICES/i pkill -f "php -S 0.0.0.0:5500"' /home/admin/stop.sh
+fi
 
-grep -q "privatebin" /home/admin/restart.sh || {
-sed -i '/# EXTENSION SERVICES STOP/i\
-pkill -f "php -S 0.0.0.0:5500"' /home/admin/restart.sh
-sed -i '/# EXTENSION SERVICES START/i\
-nohup php -S 0.0.0.0:5500 -t /var/www/privatebin > /dev/null 2>&1 &' /home/admin/restart.sh
-}
+# Add PrivateBin to restart.sh
+if ! grep -q "php -S 0.0.0.0:5500" /home/admin/restart.sh; then
+    sed -i '/# EXTENSION SERVICES STOP/i pkill -f "php -S 0.0.0.0:5500"' /home/admin/restart.sh
+    sed -i '/# EXTENSION SERVICES START/i nohup php -S 0.0.0.0:5500 -t /var/www/privatebin > /dev/null 2>&1 &' /home/admin/restart.sh
+fi
 
-echo "PrivateBin installed at /var/www/privatebin"
-echo "Access: http://<router-ip>:5500 atau http://<tailscale-ip>:5500"
+echo "✓ PrivateBin installed at /var/www/privatebin"
+echo "  Access: http://<router-ip>:5500 or http://<tailscale-ip>:5500"
+echo "  Path: /paste"

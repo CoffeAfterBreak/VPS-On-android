@@ -37,23 +37,27 @@ CONFIG_EOF
 chown admin:admin $FOCALBOARD_DIR/config.json
 DEBIAN_EOF
 
-grep -q "reverse_proxy /focalboard" /home/admin/Caddyfile || \
-sed -i '/file_server browse/i\    reverse_proxy /focalboard 0.0.0.0:5600' /home/admin/Caddyfile
+# Add reverse proxy to Caddyfile if not exists
+if ! grep -q "reverse_proxy /focalboard" /home/admin/Caddyfile; then
+    sed -i '/file_server browse/i\    reverse_proxy /focalboard 0.0.0.0:5600' /home/admin/Caddyfile
+fi
 
-grep -q "focalboard" /home/admin/start.sh || \
-sed -i '/# EXTENSION SERVICES/i\
-nohup /opt/focalboard/bin/focalboard-server > /dev/null 2>&1 &' /home/admin/start.sh
+# Add Focalboard to start.sh
+if ! grep -q "focalboard-server" /home/admin/start.sh; then
+    sed -i '/# EXTENSION SERVICES/i nohup /opt/focalboard/bin/focalboard-server > /dev/null 2>&1 &' /home/admin/start.sh
+fi
 
-grep -q "focalboard" /home/admin/stop.sh || \
-sed -i '/# EXTENSION SERVICES/i\
-pkill -f "focalboard-server"' /home/admin/stop.sh
+# Add Focalboard to stop.sh
+if ! grep -q "focalboard-server" /home/admin/stop.sh; then
+    sed -i '/# EXTENSION SERVICES/i pkill -f "focalboard-server"' /home/admin/stop.sh
+fi
 
-grep -q "focalboard" /home/admin/restart.sh || {
-sed -i '/# EXTENSION SERVICES STOP/i\
-pkill -f "focalboard-server"' /home/admin/restart.sh
-sed -i '/# EXTENSION SERVICES START/i\
-nohup /opt/focalboard/bin/focalboard-server > /dev/null 2>&1 &' /home/admin/restart.sh
-}
+# Add Focalboard to restart.sh
+if ! grep -q "focalboard-server" /home/admin/restart.sh; then
+    sed -i '/# EXTENSION SERVICES STOP/i pkill -f "focalboard-server"' /home/admin/restart.sh
+    sed -i '/# EXTENSION SERVICES START/i nohup /opt/focalboard/bin/focalboard-server > /dev/null 2>&1 &' /home/admin/restart.sh
+fi
 
-echo "Focalboard installed at /opt/focalboard"
-echo "Access: http://<router-ip>:5600 atau http://<tailscale-ip>:5600"
+echo "✓ Focalboard installed at /opt/focalboard"
+echo "  Access: http://<router-ip>:5600 or http://<tailscale-ip>:5600"
+echo "  Config: /opt/focalboard/config.json"
